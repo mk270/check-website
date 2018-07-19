@@ -14,8 +14,8 @@ def check_ip(ip_address):
         return "OK"
     except socket.timeout as e:
         return "TIMEOUT"
-    except:
-        return "UNKNOWN"
+    except Exception as e:
+        return sys.exc_info()[1]
     finally:
         s.close()
 
