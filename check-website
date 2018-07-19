@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+import sys
+import socket
+import pprint
+
+TIMEOUT_SECS = 5
+
+def check_ip(ip_address):
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(TIMEOUT_SECS)
+        s.connect((ip_address, 80))
+        return "OK"
+    except socket.timeout as e:
+        return "TIMEOUT"
+    except:
+        return "UNKNOWN"
+    finally:
+        s.close()
+
+def run():
+    _, hostname = sys.argv
+    _, _, ip_addresses = socket.gethostbyname_ex(hostname)
+    results = dict([ (ip, check_ip(ip)) for ip in ip_addresses ])
+    pprint.pprint(results)
+
+if __name__ == '__main__':
+    run()
